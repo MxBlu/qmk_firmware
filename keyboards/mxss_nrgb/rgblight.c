@@ -62,6 +62,7 @@ bool rgblight_timer_enabled = false;
 extern rgblayer_config rconf;
 extern bool rgblayer_pmode;
 extern uint8_t pmode_layer;
+int8_t old_val;
 
 extern uint32_t layer_state;
 
@@ -256,7 +257,9 @@ void rgblight_mode_eeprom_helper(uint8_t mode, bool write_to_eeprom) {
     xprintf("rgblight mode [NOEEPROM]: %u\n", rgblight_config.mode);
   }
 
+#ifdef RGBLIGHT_EFFECT_LAYER
   if (mode == RGBLIGHT_MODE_RGB_LAYER) {
+
     rgblayer_pmode = false;
     pmode_layer = 0;
 
@@ -269,7 +272,10 @@ void rgblight_mode_eeprom_helper(uint8_t mode, bool write_to_eeprom) {
       rgblight_timer_disable();
 #endif
     return;
-  } else if( is_static_effect(rgblight_config.mode) ) {
+  }
+#endif
+
+  if( is_static_effect(rgblight_config.mode) ) {
 #ifdef RGBLIGHT_USE_TIMER
       rgblight_timer_disable();
 #endif
@@ -475,19 +481,20 @@ void rgblight_sethsv_eeprom_helper(uint16_t hue, uint8_t sat, uint8_t val, bool 
         rgblight_set();
       }
 #endif
-    }
-
-    if(rgblight_config.mode == RGBLIGHT_MODE_RGB_LAYER) {
-      if (rgblayer_pmode) {
-        rconf.layers[pmode_layer].hue = hue;
-        rconf.layers[pmode_layer].sat = sat;
-        rconf.layers[pmode_layer].val = val;
-        eeprom_update_conf();
+#ifdef RGBLIGHT_EFFECT_LAYER
+      else if(rgblight_config.mode == RGBLIGHT_MODE_RGB_LAYER) {
+        if (rgblayer_pmode) {
+          rconf.layers[pmode_layer].hue = hue;
+          rconf.layers[pmode_layer].sat = sat;
+          rconf.layers[pmode_layer].val = val;
+          eeprom_update_conf();
+        }
+        for (uint8_t i = 0; i < RGBLED_NUM; i++) {
+          sethsv(hue, sat, val, (LED_TYPE *)&led[i]);
+        }
+        rgblight_set();
       }
-      for (uint8_t i = 0; i < RGBLED_NUM; i++) {
-        sethsv(hue, sat, val, (LED_TYPE *)&led[i]);
-      }
-      rgblight_set();
+#endif
     }
 
     rgblight_config.hue = hue;

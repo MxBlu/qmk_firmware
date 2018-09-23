@@ -67,6 +67,8 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 #define RGBLIGHT_SAT_STEP 15
 #define RGBLIGHT_VAL_STEP 15
 
+#define RGBLIGHT_EFFECT_LAYER
+
 /* Mechanical locking support. Use KC_LCAP, KC_LNUM or KC_LSCR instead in keymap */
 #define LOCKING_SUPPORT_ENABLE
 /* Locking resynchronize hack */
