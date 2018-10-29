@@ -65,6 +65,18 @@ bool process_record_kb(uint16_t keycode, keyrecord_t *record) {
   rgbl_process(keycode, record);
 
   switch (keycode) {
+    case KC_C: // Win + C = KC_CALC
+    if (record->event.pressed) {
+      if (keyboard_report->mods & MOD_BIT(KC_LGUI)) {
+        unregister_code(KC_LGUI);
+        register_code(KC_CALC);
+        return false;
+      }
+    } else {
+      unregister_code(KC_CALC);
+    }
+    break;
+
     default:
     break; // Process all other keycodes normally
   }
