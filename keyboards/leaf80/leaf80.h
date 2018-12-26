@@ -35,7 +35,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   { K03,   K13,   K23,   K33,   K43,   K53,   K63,   K73,   K83,   K93,   KA3,   KB3,   KC3,   KD3,   KC_NO }, \
   { K04,   K14,   K24,   K34,   K44,   K54,   K64,   K74,   K84,   K94,   KA4,   KB4,   KC4,   KC_NO, KC_NO }, \
   { K05,   K15,   K25,   K35,   K45,   K55,   K65,   K75,   K85,   K95,   KA5,   KB5,   KC5,   KD5,   KE5   }, \
-  { K06,   K16,   K26,   K36,   KC_NO, K56,   KC_NO, KC_NO, KC_NO, K96,   KA6,   KB6,   KC6,   KD6,   KC_NO }  \
+  { K06,   K16,   K26,   K36,   KC_NO, K56,   KC_NO, KC_NO, K86,   K96,   KA6,   KB6,   KC6,   KD6,   KC_NO }  \
 }
 
 #endif
