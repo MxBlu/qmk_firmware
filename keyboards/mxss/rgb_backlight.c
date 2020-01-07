@@ -1,4 +1,4 @@
-include "quantum.h"
+#include "quantum.h"
 #include "rgblight.h"
 #include "rgb_backlight.h"
 #include "via_backlight_api.h"
