@@ -18,6 +18,7 @@
 #include "tmk_core/common/eeprom.h"
 #include "tmk_core/common/action_layer.h"
 #include "rgblight.h"
+#include "rgb_backlight.h"
 #include "via.h"
 #include "version.h" // for QMK_BUILDDATE used in EEPROM magic
 
@@ -85,6 +86,22 @@ void matrix_scan_kb(void) {
 	// runs every cycle (a lot)
 
 	matrix_scan_user();
+}
+
+void raw_hid_receive_kb(uint8_t *data, uint8_t length) {
+    uint8_t *command_id = &(data[0]);
+	uint8_t *command_data = &(data[1]);
+
+	switch (*command_id) {
+        case id_backlight_config_set_value:
+            backlight_config_set_value(command_data);
+            break;
+        case id_backlight_config_get_value:
+            backlight_config_get_value(command_data);
+            break;
+        case id_backlight_config_save:
+            break;
+    }
 }
 
 bool process_record_kb(uint16_t keycode, keyrecord_t *record) {
