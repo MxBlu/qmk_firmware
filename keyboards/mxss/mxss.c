@@ -164,9 +164,7 @@ void fled_mode_cycle(void)
     switch (fled_mode) {
         case FLED_OFF:
         fled_mode = FLED_RGB;
-        if (!is_static_effect(rgblight_config.mode)) {
-            rgblight_timer_enable();
-        }
+        rgblight_timer_enable();
         break;
 
         case FLED_RGB:
