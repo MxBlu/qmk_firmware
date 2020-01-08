@@ -179,27 +179,35 @@ void backlight_config_get_value(uint8_t *data) {
     uint8_t *value_data = &(data[1]);
     switch (*value_id) {
         case VIA_API_EFFECT:
-            *value_data = get_base_effect_mode();
+            // Return [ effect_id (variable, 0-10 for qmk_underglow) ]
+            *value_data = rgblight_get_base_mode();
             break;
         case VIA_API_EFFECT_SPEED:
+            // Return [ effect_speed (0-3) ]
             get_effect_speed(value_data);
             break;
         case VIA_API_BRIGHTNESS:
+            // Return [ val (0-255) ]
             *value_data = rgblight_get_val();
             break;
         case VIA_API_COLOR_1:
+            // Return [ hue(0-255), sat(0-255) ]
             get_color(value_data);
             break;
         case VIA_API_CAPS_LOCK_INDICATOR_COLOR:
+            // Return [ hue(0-255), sat(0-255) ]
             *((hs_set *)value_data) = get_fled_caps_color();
             break;
         case VIA_API_LAYER_1_INDICATOR_COLOR:
+            // Return [ hue(0-255), sat(0-255) ]
             *((hs_set *)value_data) = get_fled_layer_color(1);
             break;
         case VIA_API_LAYER_2_INDICATOR_COLOR:
+            // Return [ hue(0-255), sat(0-255) ]
             *((hs_set *)value_data) = get_fled_layer_color(2);
             break;
         case VIA_API_LAYER_3_INDICATOR_COLOR:
+            // Return [ hue(0-255), sat(0-255) ]
             *((hs_set *)value_data) = get_fled_layer_color(3);
             break;
     }
@@ -210,27 +218,35 @@ void backlight_config_set_value(uint8_t *data) {
     uint8_t *value_data = &(data[1]);
     switch (*value_id) {
         case VIA_API_EFFECT:
+            // Set [ effect_id (variable, 0-10 for qmk_underglow) ]
             set_effect(value_data);
             break;
         case VIA_API_EFFECT_SPEED:
+            // Set [ effect_speed (0-3) ]
             set_effect_speed(*value_data);
             break;
         case VIA_API_BRIGHTNESS:
+            // Set [ val (0-255) ]
             set_brightness(value_data);
             break;
         case VIA_API_COLOR_1:
+            // Set [ hue(0-255), sat(0-255) ]
             set_color(value_data);
             break;
         case VIA_API_CAPS_LOCK_INDICATOR_COLOR:
+            // Set [ hue(0-255), sat(0-255) ]
             set_caps_color(value_data);
             break;
         case VIA_API_LAYER_1_INDICATOR_COLOR:
+            // Set [ hue(0-255), sat(0-255) ]
             set_layer_color(1, value_data);
             break;
         case VIA_API_LAYER_2_INDICATOR_COLOR:
+            // Set [ hue(0-255), sat(0-255) ]
             set_layer_color(2, value_data);
             break;
         case VIA_API_LAYER_3_INDICATOR_COLOR:
+            // Set [ hue(0-255), sat(0-255) ]
             set_layer_color(3, value_data);
             break;
     }
