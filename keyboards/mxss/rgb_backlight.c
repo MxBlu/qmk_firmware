@@ -23,9 +23,11 @@
 #include "mxss_frontled.h"
 #include "debug.h"
 
+// Cache this, so we can reuse it when we change modes
 uint8_t effect_speed = 0;
 
-uint8_t get_static_effect_mode(void) {
+// Returns the base effect mode (slowest speed/default direction)
+uint8_t get_base_effect_mode(void) {
     uint8_t mode = rgblight_get_mode();
     if (mode >= RGBLIGHT_MODE_ALTERNATING)           // 36
         return RGBLIGHT_MODE_ALTERNATING;
@@ -51,9 +53,10 @@ uint8_t get_static_effect_mode(void) {
         return RGBLIGHT_MODE_zero;
 }
 
+// Returns the maximum speed provided by the modes for a given base mode
 uint8_t get_max_effect_speed(uint8_t mode) {
     switch (mode) {
-        case RGBLIGHT_MODE_SNAKE: // Actually 2, but 4 because we double the speed
+        case RGBLIGHT_MODE_SNAKE: // Actually 2, but 4 because odd values are reversed direction
             return 4;
         case RGBLIGHT_MODE_BREATHING:
             return 3;
@@ -73,10 +76,13 @@ uint8_t get_max_effect_speed(uint8_t mode) {
 
 void set_effect_speed(uint8_t data) {
     effect_speed = data;
-    uint8_t mode = get_static_effect_mode();
+    uint8_t mode = get_base_effect_mode();
     uint8_t speed_max = get_max_effect_speed(mode);
-    if (mode == RGBLIGHT_MODE_SNAKE)
-        effect_speed *= 2; // Odd values are reversed snaking, avoid those for now.
+    if (mode == RGBLIGHT_MODE_SNAKE) // Snake is special
+        effect_speed *= 2; // Odd values are reversed snaking, even are default
+
+    // Variations on the base mode include speed and direction
+    // speed_max assists us to make sure we don't end up on the next mode
     mode += effect_speed > speed_max ? speed_max : effect_speed;
     rgblight_mode(mode);
 }
@@ -127,6 +133,7 @@ void set_effect(uint8_t *value_data) {
             rgblight_mode(RGBLIGHT_MODE_ALTERNATING);
             break;
     }
+    // Ensure that we respect the speed that VIA knows
     set_effect_speed(effect_speed);
 }
 
@@ -160,7 +167,7 @@ void get_color(uint8_t *data) {
 }
 
 uint8_t get_effect(void) {
-    uint8_t mode = get_static_effect_mode();
+    uint8_t mode = get_base_effect_mode();
     switch (mode) {
         case RGBLIGHT_MODE_STATIC_LIGHT:
             return 1;
@@ -188,9 +195,9 @@ uint8_t get_effect(void) {
 }
 
 void get_effect_speed(uint8_t *data) {
-    uint8_t mode = get_static_effect_mode();
+    uint8_t mode = get_base_effect_mode();
     uint8_t speed_max = get_max_effect_speed(mode);
-    effect_speed = rgblight_get_mode() - mode;
+    effect_speed = rgblight_get_mode() - mode; // See set_effect_speed for logic
     *data = effect_speed > speed_max ? speed_max : effect_speed;
 }
 
@@ -199,7 +206,7 @@ void backlight_config_get_value(uint8_t *data) {
     uint8_t *value_data = &(data[1]);
     switch (*value_id) {
         case VIA_API_EFFECT:
-            *value_data = get_static_effect_mode();
+            *value_data = get_base_effect_mode();
             break;
         case VIA_API_EFFECT_SPEED:
             get_effect_speed(value_data);
