@@ -20,6 +20,7 @@
 #include "rgblight.h"
 #include "rgb_backlight.h"
 #include "via_backlight_api.h"
+#include "debug.h"
 
 void set_effect(uint8_t *value_data) {
     switch (*value_data) {
@@ -123,11 +124,22 @@ void backlight_config_get_value(uint8_t *data) {
         case VIA_API_EFFECT:
             *value_data = get_effect();
             break;
+        case VIA_API_EFFECT_SPEED:
+            xprintf("getval");
+            break;
         case VIA_API_BRIGHTNESS:
             *value_data = rgblight_get_val();
             break;
         case VIA_API_COLOR_1:
             get_color(value_data);
+            break;
+        case VIA_API_CAPS_LOCK_INDICATOR_COLOR:
+            break;
+        case VIA_API_LAYER_1_INDICATOR_COLOR:
+            break;
+        case VIA_API_LAYER_2_INDICATOR_COLOR:
+            break;
+        case VIA_API_LAYER_3_INDICATOR_COLOR:
             break;
     }
 }
@@ -139,11 +151,22 @@ void backlight_config_set_value(uint8_t *data) {
         case VIA_API_EFFECT:
             set_effect(value_data);
             break;
+        case VIA_API_EFFECT_SPEED:
+            xprintf("setval: %u\n", *value_data);
+            break;
         case VIA_API_BRIGHTNESS:
             set_brightness(value_data);
             break;
         case VIA_API_COLOR_1:
             set_color(value_data);
+            break;
+        case VIA_API_CAPS_LOCK_INDICATOR_COLOR:
+            break;
+        case VIA_API_LAYER_1_INDICATOR_COLOR:
+            break;
+        case VIA_API_LAYER_2_INDICATOR_COLOR:
+            break;
+        case VIA_API_LAYER_3_INDICATOR_COLOR:
             break;
     }
 }
