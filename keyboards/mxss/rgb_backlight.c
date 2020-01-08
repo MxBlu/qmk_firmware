@@ -214,13 +214,13 @@ void backlight_config_get_value(uint8_t *data) {
             *((hs_set *)value_data) = get_fled_caps_color();
             break;
         case VIA_API_LAYER_1_INDICATOR_COLOR:
-            *((hs_set *)value_data) = get_fled_layer_color(0);
-            break;
-        case VIA_API_LAYER_2_INDICATOR_COLOR:
             *((hs_set *)value_data) = get_fled_layer_color(1);
             break;
-        case VIA_API_LAYER_3_INDICATOR_COLOR:
+        case VIA_API_LAYER_2_INDICATOR_COLOR:
             *((hs_set *)value_data) = get_fled_layer_color(2);
+            break;
+        case VIA_API_LAYER_3_INDICATOR_COLOR:
+            *((hs_set *)value_data) = get_fled_layer_color(3);
             break;
     }
 }
@@ -245,13 +245,13 @@ void backlight_config_set_value(uint8_t *data) {
             set_caps_color(value_data);
             break;
         case VIA_API_LAYER_1_INDICATOR_COLOR:
-            set_layer_color(0, value_data);
-            break;
-        case VIA_API_LAYER_2_INDICATOR_COLOR:
             set_layer_color(1, value_data);
             break;
-        case VIA_API_LAYER_3_INDICATOR_COLOR:
+        case VIA_API_LAYER_2_INDICATOR_COLOR:
             set_layer_color(2, value_data);
+            break;
+        case VIA_API_LAYER_3_INDICATOR_COLOR:
+            set_layer_color(3, value_data);
             break;
     }
 }
