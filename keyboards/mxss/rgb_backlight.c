@@ -26,33 +26,6 @@
 // Cache this, so we can reuse it when we change modes
 uint8_t effect_speed = 0;
 
-// Returns the base effect mode (slowest speed/default direction)
-uint8_t get_base_effect_mode(void) {
-    uint8_t mode = rgblight_get_mode();
-    if (mode >= RGBLIGHT_MODE_ALTERNATING)           // 36
-        return RGBLIGHT_MODE_ALTERNATING;
-    else if (mode == RGBLIGHT_MODE_RGB_TEST)         // 35
-        return RGBLIGHT_MODE_RGB_TEST;
-    else if (mode >= RGBLIGHT_MODE_STATIC_GRADIENT)  // 25 - 34
-        return RGBLIGHT_MODE_STATIC_GRADIENT;
-    else if (mode == RGBLIGHT_MODE_CHRISTMAS)        // 24
-        return RGBLIGHT_MODE_CHRISTMAS;
-    else if (mode >= RGBLIGHT_MODE_KNIGHT)           // 21 - 23
-        return RGBLIGHT_MODE_KNIGHT;
-    else if (mode >= RGBLIGHT_MODE_SNAKE)            // [15, 17, 19], [16, 18, 20] (backwards)
-        return RGBLIGHT_MODE_SNAKE;
-    else if (mode >= RGBLIGHT_MODE_RAINBOW_SWIRL)    // 9 - 11, 12 - 14 (backwards)
-        return RGBLIGHT_MODE_RAINBOW_SWIRL;
-    else if (mode >= RGBLIGHT_MODE_RAINBOW_MOOD)     // 6 - 8
-        return RGBLIGHT_MODE_RAINBOW_MOOD;
-    else if (mode >= RGBLIGHT_MODE_BREATHING)        // 2 - 5
-        return RGBLIGHT_MODE_BREATHING;
-    else if (mode == RGBLIGHT_MODE_STATIC_LIGHT)     // 1
-        return RGBLIGHT_MODE_STATIC_LIGHT;
-    else
-        return RGBLIGHT_MODE_zero;
-}
-
 // Returns the maximum speed provided by the modes for a given base mode
 uint8_t get_max_effect_speed(uint8_t mode) {
     switch (mode) {
@@ -76,7 +49,7 @@ uint8_t get_max_effect_speed(uint8_t mode) {
 
 void set_effect_speed(uint8_t data) {
     effect_speed = data;
-    uint8_t mode = get_base_effect_mode();
+    uint8_t mode = rgblight_get_base_mode();
     uint8_t speed_max = get_max_effect_speed(mode);
     if (mode == RGBLIGHT_MODE_SNAKE) // Snake is special
         effect_speed *= 2; // Odd values are reversed snaking, even are default
@@ -167,7 +140,7 @@ void get_color(uint8_t *data) {
 }
 
 uint8_t get_effect(void) {
-    uint8_t mode = get_base_effect_mode();
+    uint8_t mode = rgblight_get_base_mode();
     switch (mode) {
         case RGBLIGHT_MODE_STATIC_LIGHT:
             return 1;
@@ -195,7 +168,7 @@ uint8_t get_effect(void) {
 }
 
 void get_effect_speed(uint8_t *data) {
-    uint8_t mode = get_base_effect_mode();
+    uint8_t mode = rgblight_get_base_mode();
     uint8_t speed_max = get_max_effect_speed(mode);
     effect_speed = rgblight_get_mode() - mode; // See set_effect_speed for logic
     *data = effect_speed > speed_max ? speed_max : effect_speed;

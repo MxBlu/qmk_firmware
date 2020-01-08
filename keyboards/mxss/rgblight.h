@@ -235,6 +235,7 @@ void rgblight_sethsv_noeeprom(uint8_t hue, uint8_t sat, uint8_t val);
 
 /*       query */
 uint8_t rgblight_get_mode(void);
+uint8_t rgblight_get_base_mode(void);
 uint8_t rgblight_get_hue(void);
 uint8_t rgblight_get_sat(void);
 uint8_t rgblight_get_val(void);

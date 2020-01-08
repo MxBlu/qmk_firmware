@@ -299,6 +299,14 @@ uint8_t rgblight_get_mode(void) {
     return rgblight_config.mode;
 }
 
+uint8_t rgblight_get_base_mode(void) {
+    if (!rgblight_config.enable) {
+        return false;
+    }
+
+    return mode_base_table[rgblight_config.mode];
+}
+
 void rgblight_mode_eeprom_helper(uint8_t mode, bool write_to_eeprom) {
     if (!rgblight_config.enable) {
         return;
