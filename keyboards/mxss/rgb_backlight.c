@@ -20,6 +20,7 @@
 #include "rgblight.h"
 #include "rgb_backlight.h"
 #include "via_backlight_api.h"
+#include "mxss_frontled.h"
 #include "debug.h"
 
 void set_effect(uint8_t *value_data) {
@@ -82,6 +83,16 @@ void set_brightness(uint8_t *data) {
     rgblight_sethsv(hue, sat, *data);
 }
 
+void set_layer_color(uint8_t layer, uint8_t *data) {
+    hs_set *hs = (hs_set *)data;
+    set_fled_layer_color(layer, *hs);
+}
+
+void set_caps_color(uint8_t *data) {
+    hs_set *hs = (hs_set *)data;
+    set_fled_caps_color(*hs);
+}
+
 void get_color(uint8_t *data) {
     uint8_t hue = rgblight_get_hue();
     uint8_t sat = rgblight_get_sat();
@@ -125,7 +136,7 @@ void backlight_config_get_value(uint8_t *data) {
             *value_data = get_effect();
             break;
         case VIA_API_EFFECT_SPEED:
-            xprintf("getval");
+            xprintf("getval\n");
             break;
         case VIA_API_BRIGHTNESS:
             *value_data = rgblight_get_val();
@@ -134,12 +145,16 @@ void backlight_config_get_value(uint8_t *data) {
             get_color(value_data);
             break;
         case VIA_API_CAPS_LOCK_INDICATOR_COLOR:
+            *((hs_set *)value_data) = get_fled_caps_color();
             break;
         case VIA_API_LAYER_1_INDICATOR_COLOR:
+            *((hs_set *)value_data) = get_fled_layer_color(0);
             break;
         case VIA_API_LAYER_2_INDICATOR_COLOR:
+            *((hs_set *)value_data) = get_fled_layer_color(1);
             break;
         case VIA_API_LAYER_3_INDICATOR_COLOR:
+            *((hs_set *)value_data) = get_fled_layer_color(2);
             break;
     }
 }
@@ -161,12 +176,16 @@ void backlight_config_set_value(uint8_t *data) {
             set_color(value_data);
             break;
         case VIA_API_CAPS_LOCK_INDICATOR_COLOR:
+            set_caps_color(value_data);
             break;
         case VIA_API_LAYER_1_INDICATOR_COLOR:
+            set_layer_color(0, value_data);
             break;
         case VIA_API_LAYER_2_INDICATOR_COLOR:
+            set_layer_color(1, value_data);
             break;
         case VIA_API_LAYER_3_INDICATOR_COLOR:
+            set_layer_color(2, value_data);
             break;
     }
 }

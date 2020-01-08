@@ -30,6 +30,9 @@ BLUETOOTH_ENABLE = no       # Enable Bluetooth with the Adafruit EZ-Key HID
 AUDIO_ENABLE = no           # Audio output on port C6
 FAUXCLICKY_ENABLE = no      # Use buzzer to emulate clicky switches
 
+SRC += mxss_frontled.c
+SRC += rgb_backlight.c
+
 # Remove the common RGB light code and use my iteration instead
 OPT_DEFS += -DRGBLIGHT_ENABLE
 SRC += $(QUANTUM_DIR)/process_keycode/process_rgb.c
