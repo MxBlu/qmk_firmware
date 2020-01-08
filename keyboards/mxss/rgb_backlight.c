@@ -23,52 +23,111 @@
 #include "mxss_frontled.h"
 #include "debug.h"
 
+uint8_t effect_speed = 0;
+
+uint8_t get_static_effect_mode(void) {
+    uint8_t mode = rgblight_get_mode();
+    if (mode >= RGBLIGHT_MODE_ALTERNATING)           // 36
+        return RGBLIGHT_MODE_ALTERNATING;
+    else if (mode == RGBLIGHT_MODE_RGB_TEST)         // 35
+        return RGBLIGHT_MODE_RGB_TEST;
+    else if (mode >= RGBLIGHT_MODE_STATIC_GRADIENT)  // 25 - 34
+        return RGBLIGHT_MODE_STATIC_GRADIENT;
+    else if (mode == RGBLIGHT_MODE_CHRISTMAS)        // 24
+        return RGBLIGHT_MODE_CHRISTMAS;
+    else if (mode >= RGBLIGHT_MODE_KNIGHT)           // 21 - 23
+        return RGBLIGHT_MODE_KNIGHT;
+    else if (mode >= RGBLIGHT_MODE_SNAKE)            // [15, 17, 19], [16, 18, 20] (backwards)
+        return RGBLIGHT_MODE_SNAKE;
+    else if (mode >= RGBLIGHT_MODE_RAINBOW_SWIRL)    // 9 - 11, 12 - 14 (backwards)
+        return RGBLIGHT_MODE_RAINBOW_SWIRL;
+    else if (mode >= RGBLIGHT_MODE_RAINBOW_MOOD)     // 6 - 8
+        return RGBLIGHT_MODE_RAINBOW_MOOD;
+    else if (mode >= RGBLIGHT_MODE_BREATHING)        // 2 - 5
+        return RGBLIGHT_MODE_BREATHING;
+    else if (mode == RGBLIGHT_MODE_STATIC_LIGHT)     // 1
+        return RGBLIGHT_MODE_STATIC_LIGHT;
+    else
+        return RGBLIGHT_MODE_zero;
+}
+
+uint8_t get_max_effect_speed(uint8_t mode) {
+    switch (mode) {
+        case RGBLIGHT_MODE_SNAKE: // Actually 2, but 4 because we double the speed
+            return 4;
+        case RGBLIGHT_MODE_BREATHING:
+            return 3;
+        case RGBLIGHT_MODE_RAINBOW_MOOD:
+        case RGBLIGHT_MODE_RAINBOW_SWIRL:
+        case RGBLIGHT_MODE_KNIGHT:
+            return 2;
+        case RGBLIGHT_MODE_STATIC_LIGHT:
+        case RGBLIGHT_MODE_CHRISTMAS:
+        case RGBLIGHT_MODE_STATIC_GRADIENT:
+        case RGBLIGHT_MODE_RGB_TEST:
+        case RGBLIGHT_MODE_ALTERNATING:
+        default:
+            return 0;
+    }
+}
+
+void set_effect_speed(uint8_t data) {
+    effect_speed = data;
+    uint8_t mode = get_static_effect_mode();
+    uint8_t speed_max = get_max_effect_speed(mode);
+    if (mode == RGBLIGHT_MODE_SNAKE)
+        effect_speed *= 2; // Odd values are reversed snaking, avoid those for now.
+    mode += effect_speed > speed_max ? speed_max : effect_speed;
+    rgblight_mode(mode);
+}
+
 void set_effect(uint8_t *value_data) {
     switch (*value_data) {
         case 0:
             rgblight_disable();
             break;
         case 1:
-            rgblight_mode(RGBLIGHT_MODE_STATIC_LIGHT);
             rgblight_enable();
+            rgblight_mode(RGBLIGHT_MODE_STATIC_LIGHT);
             break;
         case 2:
-            rgblight_mode(RGBLIGHT_MODE_BREATHING);
             rgblight_enable();
+            rgblight_mode(RGBLIGHT_MODE_BREATHING);
             break;
         case 3:
-            rgblight_mode(RGBLIGHT_MODE_RAINBOW_MOOD);
             rgblight_enable();
+            rgblight_mode(RGBLIGHT_MODE_RAINBOW_MOOD);
             break;
         case 4:
-            rgblight_mode(RGBLIGHT_MODE_RAINBOW_SWIRL);
             rgblight_enable();
+            rgblight_mode(RGBLIGHT_MODE_RAINBOW_SWIRL);
             break;
         case 5:
-            rgblight_mode(RGBLIGHT_MODE_SNAKE);
             rgblight_enable();
+            rgblight_mode(RGBLIGHT_MODE_SNAKE);
             break;
         case 6:
-            rgblight_mode(RGBLIGHT_MODE_KNIGHT);
             rgblight_enable();
+            rgblight_mode(RGBLIGHT_MODE_KNIGHT);
             break;
         case 7:
-            rgblight_mode(RGBLIGHT_MODE_CHRISTMAS);
             rgblight_enable();
+            rgblight_mode(RGBLIGHT_MODE_CHRISTMAS);
             break;
         case 8:
-            rgblight_mode(RGBLIGHT_MODE_STATIC_GRADIENT);
             rgblight_enable();
+            rgblight_mode(RGBLIGHT_MODE_STATIC_GRADIENT);
             break;
         case 9:
-            rgblight_mode(RGBLIGHT_MODE_RGB_TEST);
             rgblight_enable();
+            rgblight_mode(RGBLIGHT_MODE_RGB_TEST);
             break;
         case 10:
-            rgblight_mode(RGBLIGHT_MODE_ALTERNATING);
             rgblight_enable();
+            rgblight_mode(RGBLIGHT_MODE_ALTERNATING);
             break;
     }
+    set_effect_speed(effect_speed);
 }
 
 void set_color(uint8_t *data) {
@@ -101,7 +160,7 @@ void get_color(uint8_t *data) {
 }
 
 uint8_t get_effect(void) {
-    uint8_t mode = rgblight_get_mode();
+    uint8_t mode = get_static_effect_mode();
     switch (mode) {
         case RGBLIGHT_MODE_STATIC_LIGHT:
             return 1;
@@ -128,15 +187,22 @@ uint8_t get_effect(void) {
     }
 }
 
+void get_effect_speed(uint8_t *data) {
+    uint8_t mode = get_static_effect_mode();
+    uint8_t speed_max = get_max_effect_speed(mode);
+    effect_speed = rgblight_get_mode() - mode;
+    *data = effect_speed > speed_max ? speed_max : effect_speed;
+}
+
 void backlight_config_get_value(uint8_t *data) {
     uint8_t *value_id   = &(data[0]);
     uint8_t *value_data = &(data[1]);
     switch (*value_id) {
         case VIA_API_EFFECT:
-            *value_data = get_effect();
+            *value_data = get_static_effect_mode();
             break;
         case VIA_API_EFFECT_SPEED:
-            xprintf("getval\n");
+            get_effect_speed(value_data);
             break;
         case VIA_API_BRIGHTNESS:
             *value_data = rgblight_get_val();
@@ -167,7 +233,7 @@ void backlight_config_set_value(uint8_t *data) {
             set_effect(value_data);
             break;
         case VIA_API_EFFECT_SPEED:
-            xprintf("setval: %u\n", *value_data);
+            set_effect_speed(*value_data);
             break;
         case VIA_API_BRIGHTNESS:
             set_brightness(value_data);
