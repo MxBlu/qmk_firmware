@@ -16,6 +16,7 @@
 #pragma once
 
 #include "quantum.h"
+#include "hbcp_frontled.h"
 
 /* This a shortcut to help you visually see your layout.
  *

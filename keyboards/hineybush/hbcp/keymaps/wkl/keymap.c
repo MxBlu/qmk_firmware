@@ -17,7 +17,7 @@
 
 // Defines the keycodes used by our macros in process_record_user
 enum custom_keycodes {
-  QMKBEST = SAFE_RANGE,
+  QMKBEST = NEW_SAFE_RANGE,
   QMKURL
 };
 

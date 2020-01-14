@@ -24,10 +24,18 @@ SLEEP_LED_ENABLE = no       # Breathing sleep LED during USB suspend
 # if this doesn't work, see here: https://github.com/tmk/tmk_keyboard/wiki/FAQ#nkro-doesnt-work
 NKRO_ENABLE = yes            # USB Nkey Rollover
 BACKLIGHT_ENABLE = yes       # Enable keyboard backlight functionality on B7 by default
-RGBLIGHT_ENABLE = yes        # Enable keyboard RGB underglow
 MIDI_ENABLE = no            # MIDI support
 UNICODE_ENABLE = no         # Unicode
 BLUETOOTH_ENABLE = no       # Enable Bluetooth with the Adafruit EZ-Key HID
 AUDIO_ENABLE = no           # Audio output on port C6
 FAUXCLICKY_ENABLE = no      # Use buzzer to emulate clicky switches
 HD44780_ENABLE = no 		# Enable support for HD44780 based LCDs
+
+# Remove the common RGB light code and use my iteration instead
+OPT_DEFS += -DRGBLIGHT_ENABLE
+SRC += $(QUANTUM_DIR)/process_keycode/process_rgb.c
+SRC += rgblight.c
+SRC += color.c
+SRC += ws2812.c
+CIE1931_CURVE = yes
+LED_BREATHING_TABLE = yes
