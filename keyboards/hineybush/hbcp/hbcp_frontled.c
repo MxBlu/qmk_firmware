@@ -16,7 +16,7 @@
  * Extended from the work done by fcoury: https://github.com/qmk/qmk_firmware/pull/4915
  */
 
-#include "mxss_frontled.h"
+#include "hbcp_frontled.h"
 #include "tmk_core/common/eeprom.h"
 #include "rgblight.h"
 #include "via.h"
@@ -31,7 +31,7 @@ LED_TYPE fleds[3];  // Front LED rgb values for indicator mode use
 __attribute__ ((weak))
 hs_set indicator_colors[FRONTLED_COLOR_MAXCNT];
 
-static void set_lock_or_black(uint8_t, uint8_t, uint8_t, uint8_t, RGB*);
+static void set_lock_or_black(uint8_t, uint8_t, hs_set, RGB*);
 
 void fled_init(void) {
 	// If EEPROM config exists, load it
@@ -180,7 +180,7 @@ void fled_val_decrease(void)
 void fled_lock_update(uint8_t usb_led) {
 	// Set indicator LED appropriately, whether it is used or not
 	for (uint8_t i = USB_LED_NUM_LOCK; i < USB_LED_SCROLL_LOCK; i++) {
-		set_or_black(usb_led, i, indicator_colors[i], &fleds[i]);
+		set_lock_or_black(usb_led, i, indicator_colors[i], &fleds[i]);
 	}
 
 	rgblight_set();
