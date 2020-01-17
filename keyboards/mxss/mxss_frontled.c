@@ -226,7 +226,6 @@ void set_fled_layer_color(uint8_t layer, hs_set hs) {
     // Update layer colors and refresh LEDs
     layer_colors[layer] = hs;
     fled_layer_update(layer_state);
-    fled_update_conf();
 }
 
 hs_set get_fled_layer_color(uint8_t layer) {
@@ -237,7 +236,6 @@ void set_fled_caps_color(hs_set hs) {
     // Update caplock color and refresh LEDs
     caps_color = hs;
     fled_lock_update(host_keyboard_led_state());
-    fled_update_conf();
 }
 
 hs_set get_fled_caps_color(void) {
