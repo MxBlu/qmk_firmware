@@ -12,8 +12,6 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
- * Extended from the work done by fcoury: https://github.com/qmk/qmk_firmware/pull/4915
  */
 
 #include "quantum.h"
@@ -27,19 +25,15 @@ void mxss_rgblight_get_value(uint8_t *data) {
     uint8_t *value_data = &(data[1]);
     switch (*value_id) {
         case id_qmk_rgblight_caps_lock_indicator_color:
-            // Return [ hue(0-255), sat(0-255) ]
             *((hs_set *)value_data) = get_fled_caps_color();
             break;
         case id_qmk_rgblight_layer_1_indicator_color:
-            // Return [ hue(0-255), sat(0-255) ]
             *((hs_set *)value_data) = get_fled_layer_color(1);
             break;
         case id_qmk_rgblight_layer_2_indicator_color:
-            // Return [ hue(0-255), sat(0-255) ]
             *((hs_set *)value_data) = get_fled_layer_color(2);
             break;
         case id_qmk_rgblight_layer_3_indicator_color:
-            // Return [ hue(0-255), sat(0-255) ]
             *((hs_set *)value_data) = get_fled_layer_color(3);
             break;
     }
