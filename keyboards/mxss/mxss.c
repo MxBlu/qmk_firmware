@@ -23,6 +23,10 @@
 #include "via.h"
 #include "version.h" // for QMK_BUILDDATE used in EEPROM magic
 
+#ifdef VIA_ENABLE
+    #include "mxss_via_rgblight.h"
+#endif
+
 void via_init_kb(void) {
 	fled_init();
 }
@@ -62,27 +66,28 @@ layer_state_t layer_state_set_kb(layer_state_t state) {
     return layer_state_set_user(state);
 }
 
-// VIA specific
-#ifndef VIA_ENABLE
-
-#include "mxss_via_rgblight.h"
-
-void raw_hid_receive_kb(uint8_t *data, uint8_t length) {
+// VIA rgblight handler
+#ifdef VIA_ENABLE
+    void raw_hid_receive_kb(uint8_t *data, uint8_t length) {
     uint8_t *command_id = &(data[0]);
 	uint8_t *command_data = &(data[1]);
 
 	switch (*command_id) {
-        case id_backlight_config_set_value:
+        case id_lighting_set_value:
             mxss_rgblight_set_value(command_data);
             break;
-        case id_backlight_config_get_value:
+        case id_lighting_get_value:
             mxss_rgblight_get_value(command_data);
             break;
-        case id_backlight_config_save:
+        case id_lighting_save:
             mxss_rgblight_save_value();
             break;
     }
 }
+#endif
+
+// VIA EEPROM functions for non-VIA build
+#ifndef VIA_ENABLE
 
 // Sets VIA/keyboard level usage of EEPROM to valid/invalid
 // Keyboard level code (eg. via_init_kb()) should not call this
