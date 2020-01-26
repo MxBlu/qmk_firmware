@@ -24,16 +24,16 @@ void mxss_rgblight_get_value(uint8_t *data) {
     uint8_t *value_id   = &(data[0]);
     uint8_t *value_data = &(data[1]);
     switch (*value_id) {
-        case id_qmk_rgblight_caps_lock_indicator_color:
+        case id_backlight_caps_lock_indicator_color:
             *((hs_set *)value_data) = get_fled_caps_color();
             break;
-        case id_qmk_rgblight_layer_1_indicator_color:
+        case id_backlight_layer_1_indicator_color:
             *((hs_set *)value_data) = get_fled_layer_color(1);
             break;
-        case id_qmk_rgblight_layer_2_indicator_color:
+        case id_backlight_layer_2_indicator_color:
             *((hs_set *)value_data) = get_fled_layer_color(2);
             break;
-        case id_qmk_rgblight_layer_3_indicator_color:
+        case id_backlight_layer_3_indicator_color:
             *((hs_set *)value_data) = get_fled_layer_color(3);
             break;
     }
@@ -43,16 +43,16 @@ void mxss_rgblight_set_value(uint8_t *data) {
     uint8_t *value_id   = &(data[0]);
     uint8_t *value_data = &(data[1]);
     switch (*value_id) {
-        case id_qmk_rgblight_caps_lock_indicator_color:
+        case id_backlight_caps_lock_indicator_color:
             set_fled_caps_color(*(hs_set *)value_data);
             break;
-        case id_qmk_rgblight_layer_1_indicator_color:
+        case id_backlight_layer_1_indicator_color:
             set_fled_layer_color(1, *(hs_set *)value_data);
             break;
-        case id_qmk_rgblight_layer_2_indicator_color:
+        case id_backlight_layer_2_indicator_color:
             set_fled_layer_color(2, *(hs_set *)value_data);
             break;
-        case id_qmk_rgblight_layer_3_indicator_color:
+        case id_backlight_layer_3_indicator_color:
             set_fled_layer_color(3, *(hs_set *)value_data);
             break;
     }
