@@ -20,8 +20,8 @@
 
 // Retrieved from https://github.com/the-via/reader/blob/master/src/types.ts
 enum via_lighting_value_ext {
-  id_qmk_rgblight_caps_lock_indicator_color = 0x0e,
-  id_qmk_rgblight_layer_1_indicator_color = 0x10,
-  id_qmk_rgblight_layer_2_indicator_color = 0x12,
-  id_qmk_rgblight_layer_3_indicator_color = 0x14,
+  id_backlight_caps_lock_indicator_color = 0x0e,
+  id_backlight_layer_1_indicator_color = 0x10,
+  id_backlight_layer_2_indicator_color = 0x12,
+  id_backlight_layer_3_indicator_color = 0x14,
 };
