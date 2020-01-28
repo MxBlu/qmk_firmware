@@ -238,6 +238,40 @@ void fled_lock_update(led_t led_state) {
     rgblight_set();
 }
 
+void set_fled_mode(uint8_t mode) {
+    // Update front LED mode and refresh LEDs
+    fled_mode = mode;
+
+    // Update and set LED state
+    if (fled_mode == FLED_INDI) {
+        fled_layer_update(layer_state);
+        fled_lock_update(host_keyboard_led_state());
+    } else {
+        rgblight_set();
+    }
+}
+
+uint8_t get_fled_mode(void) {
+    return fled_mode;
+}
+
+void set_fled_val(uint8_t val) {
+    // Update front LED value and refresh LEDs
+    fled_val = val;
+
+    // Update and set LED state
+    if (fled_mode == FLED_INDI) {
+        fled_layer_update(layer_state);
+        fled_lock_update(host_keyboard_led_state());
+    } else {
+        rgblight_set();
+    }
+}
+
+uint8_t get_fled_val(void) {
+    return fled_val;
+}
+
 void set_fled_layer_color(uint8_t layer, hs_set hs) {
     // Update layer colors and refresh LEDs
     layer_colors[layer] = hs;

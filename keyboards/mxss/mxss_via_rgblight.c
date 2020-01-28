@@ -24,6 +24,12 @@ void mxss_rgblight_get_value(uint8_t *data) {
     uint8_t *value_id   = &(data[0]);
     uint8_t *value_data = &(data[1]);
     switch (*value_id) {
+        case id_qmk_backlight_effect:
+            value_data[0] = get_fled_mode();
+            break;
+        case id_qmk_backlight_brightness:
+            value_data[0] = get_fled_val();
+            break;
         case id_backlight_caps_lock_indicator_color:
             *((hs_set *)value_data) = get_fled_caps_color();
             break;
@@ -43,6 +49,12 @@ void mxss_rgblight_set_value(uint8_t *data) {
     uint8_t *value_id   = &(data[0]);
     uint8_t *value_data = &(data[1]);
     switch (*value_id) {
+        case id_qmk_backlight_effect:
+            set_fled_mode(value_data[0]);
+            break;
+        case id_qmk_backlight_brightness:
+            set_fled_val(value_data[0]);
+            break;
         case id_backlight_caps_lock_indicator_color:
             set_fled_caps_color(*(hs_set *)value_data);
             break;

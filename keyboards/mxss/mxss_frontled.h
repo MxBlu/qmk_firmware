@@ -82,7 +82,11 @@ void fled_val_decrease(void);       // Decrease the brightness of the front LEDs
 void fled_layer_update(layer_state_t state);   // Process layer update for front LEDs
 void fled_lock_update(led_t led_state);     // Process lock update for front LEDs
 
+void set_fled_mode(uint8_t mode);           // Set front LED operation mode
+void set_fled_val(uint8_t val);             // Set front LED brightness
 void set_fled_layer_color(uint8_t layer, hs_set hs); // Set color for a given layer
 void set_fled_caps_color(hs_set hs);        // Set color for the capslock indicator
+uint8_t get_fled_mode(void);                // Get front LED operation mode
+uint8_t get_fled_val(void);                 // Get front LED brightness
 hs_set get_fled_caps_color(void);           // Get color for the capslock indicator
 hs_set get_fled_layer_color(uint8_t layer);       // Get color for a given layer
