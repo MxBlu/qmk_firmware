@@ -223,6 +223,8 @@ void fled_layer_update(layer_state_t state) {
     } else {
         setrgb(0, 0, 0, &fleds[1]);
     }
+
+    rgblight_set();
 }
 
 void fled_lock_update(led_t led_state) {
