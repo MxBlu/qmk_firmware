@@ -3,7 +3,7 @@
 ![MxSS - Polycarb 65% Kit for MX/SMK](https://i.imgur.com/WDTWcmU.jpg)
 
 ### Important Note:
-**This PCB supports the VIA configurator, and this is the recommended way to configure the keymap on this keyboard. Building the firmware should only be necessary if you would like to change the colours of the front LEDs in indicator mode.**
+**This PCB supports the VIA configurator, and this is the recommended way to configure this keyboard.**
 
 **For more information about the VIA configurator, [see here](https://caniusevia.com/).**
 
@@ -46,14 +46,20 @@ There are 3 modes of operation:
  - FLED_RGB - Front LEDs are part of the standard RGB LED modes, only works correctly with rainbow modes (will fix on request)
  - FLED_INDI - Top front LED represents Caps Lock status, bottom LED represents current layer
  
-Colors for FLED_INDI mode are hardcoded as hue/saturation values, the caps lock color can be found in mxss_frontled.h, the layer colors are defined in keymap.c (see default/keymap.c for example).
+Colors for FLED_INDI mode are hardcoded as hue/saturation values, the caps lock color and layer colors are defined in mxss_frontled.c or keymap.c (see default/keymap.c for example).
 
 ## Custom Keycodes
 
  - FLED_MOD - Cycle between the 3 modes (FLED_OFF -> FLED_RGB -> FLED_INDI)
  - FLED_VAI - Increase front LED brightness
  - FLED_VAD - Decrease front LED brightness
+
+## VIA Operation
+
+Support has been added to configure all front LED settings inside VIA:
+ - Under the Lighting tab, you will find Effect and Brightness with correspond to the mode and brightness of the front LEDs respectively.
+ - Under Advanced inside the Lighting tab, you can configure the colors for the front LEDs in Indicator mode.
  
- # Further Notes
+# Further Notes
  
  As SAFE_RANGE is used for defining the custom keycodes seen above, please use NEW_SAFE_RANGE as the starting value for any custom keycodes in keymap.c, as per the example.
