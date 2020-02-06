@@ -242,6 +242,10 @@ void set_fled_mode(uint8_t mode) {
     // Update front LED mode and refresh LEDs
     fled_mode = mode;
 
+    if (mode == FLED_RGB) {
+        rgblight_timer_enable();
+    }
+
     // Update and set LED state
     if (fled_mode == FLED_INDI) {
         fled_layer_update(layer_state);
